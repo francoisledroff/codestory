@@ -1,0 +1,14 @@
+# a comment - this is ignored
+*.jar
+.DS_Store
+.vlt
+bin
+bin-debug
+bin-release
+bin-release-temp
+target
+.pmd
+.settings
+.classpath
+.project
+private-*
