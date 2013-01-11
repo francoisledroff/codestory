@@ -9,6 +9,8 @@ import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.methods.StringRequestEntity;
 
 public class SimpleQnAsTest extends TestCase
 {
@@ -34,6 +36,15 @@ public class SimpleQnAsTest extends TestCase
         assertTrue(statusCode == HttpStatus.SC_OK);
         byte[] responseBody = method.getResponseBody();
         assertEquals(expectedAnswer, new String(responseBody));
-
+    }
+    
+    public void testCanIPost() throws HttpException, IOException
+    {
+        HttpClient client = new HttpClient();
+        PostMethod method = new PostMethod(baseurl);         
+        StringRequestEntity requestEntity = new StringRequestEntity("testing a post", "plain/text", null);   
+        method.setRequestEntity(requestEntity);        
+        int statusCode = client.executeMethod(method);
+        assertTrue(statusCode == HttpStatus.SC_CREATED);
     }
 }

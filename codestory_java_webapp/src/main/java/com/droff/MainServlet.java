@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.io.IOUtils;
 
 public class MainServlet extends HttpServlet
@@ -40,7 +41,7 @@ public class MainServlet extends HttpServlet
             }
             else
             {
-                getServletContext().log("GET q="+question);
+                getServletContext().log("GET q=" + question);
                 return "I took a note of this, please get back to me later";
             }
         }
@@ -51,9 +52,13 @@ public class MainServlet extends HttpServlet
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
+    protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
     {
         getServletContext().log("POST:" + IOUtils.toString(req.getInputStream()));
+        res.setStatus(HttpStatus.SC_CREATED);
+        PrintWriter out = res.getWriter();
+        out.print("Thanks for posting");
+        out.close();
     }
 
 }
