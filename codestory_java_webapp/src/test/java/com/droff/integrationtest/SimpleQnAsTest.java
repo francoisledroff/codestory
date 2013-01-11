@@ -14,15 +14,17 @@ import org.apache.commons.httpclient.methods.StringRequestEntity;
 
 public class SimpleQnAsTest extends TestCase
 {
-    //private static final String baseurl = "http://localhost:8080/codestory_java_webapp/";
-    private static final String baseurl = "http://codestory.thatsocliche.cloudbees.net/";
+    private static final String baseurl = "http://localhost:8080/codestory_java_webapp/";
+    //private static final String baseurl = "http://codestory.thatsocliche.cloudbees.net/";
 
  
     public void testSimpleAnswersFromSimpleQuestions() throws HttpException, IOException
     {
         testSimpleAnswerFromSimpleGetQuestion("Quelle est ton adresse email", "francois.le.droff@gmail.com");
         testSimpleAnswerFromSimpleGetQuestion("Es tu abonne a la mailing list(OUI/NON)", "OUI");    
-        testSimpleAnswerFromSimpleGetQuestion("Es tu heureux de participer(OUI/NON)", "OUI");    
+        testSimpleAnswerFromSimpleGetQuestion("Es tu heureux de participer(OUI/NON)", "OUI");   
+        testSimpleAnswerFromSimpleGetQuestion("Es tu pret a recevoir une enonce au format markdown par http post(OUI/NON)", "OUI");   
+        testSimpleAnswerFromSimpleGetQuestion("Est ce que tu reponds toujours oui(OUI/NON)", "NON");   
     }
    
     private void testSimpleAnswerFromSimpleGetQuestion(String question, String expectedAnswer) throws HttpException, IOException
