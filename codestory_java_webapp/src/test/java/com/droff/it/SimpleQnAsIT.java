@@ -1,4 +1,4 @@
-package com.droff.integrationtest;
+package com.droff.it;
 
 import java.io.IOException;
 
@@ -12,11 +12,10 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 
-public class SimpleQnAsTest extends TestCase
+public class SimpleQnAsIT extends TestCase
 {
     private static final String baseurl = "http://localhost:8080/codestory_java_webapp/";
     //private static final String baseurl = "http://codestory.thatsocliche.cloudbees.net/";
-
  
     public void testSimpleAnswersFromSimpleQuestions() throws HttpException, IOException
     {
