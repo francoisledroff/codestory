@@ -4,12 +4,12 @@
 	<display-name>Francois CodeStory</display-name>
 
 	<servlet>
-		<servlet-name>hello</servlet-name>
-		<servlet-class>com.droff.HelloWorld</servlet-class>
+		<servlet-name>main</servlet-name>
+		<servlet-class>com.droff.MainServlet</servlet-class>
 	</servlet>
 
 	<servlet-mapping>
-		<servlet-name>hello</servlet-name>
+		<servlet-name>main</servlet-name>
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
 </web-app>
