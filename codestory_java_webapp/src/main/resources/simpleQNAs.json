@@ -3,6 +3,7 @@
 {question:"Es tu abonne a la mailing list(OUI/NON)",answer:"OUI"},
 {question:"Es tu heureux de participer(OUI/NON)",answer:"OUI"},
 {question:"Es tu pret a recevoir une enonce au format markdown par http post(OUI/NON)",answer:"OUI"},
-{question:"Est ce que tu reponds toujours oui(OUI/NON)",answer:"NON"}
+{question:"Est ce que tu reponds toujours oui(OUI/NON)",answer:"NON"},
+{question:"As tu bien recu le premier enonce(OUI/NON)",answer:"OUI"}
 ]
 
