@@ -12,7 +12,7 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 
-public class SimpleQnAsIT extends TestCase
+public class QnaIT extends TestCase
 {
     private static final String baseurl = "http://localhost:8080/codestory_java_webapp/";
     //private static final String baseurl = "http://codestory.thatsocliche.cloudbees.net/";

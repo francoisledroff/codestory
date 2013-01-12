@@ -7,9 +7,18 @@
 		<servlet-name>main</servlet-name>
 		<servlet-class>com.droff.MainServlet</servlet-class>
 	</servlet>
+	<servlet>
+        <servlet-name>change</servlet-name>
+        <servlet-class>com.droff.scalaskel.Change</servlet-class>
+    </servlet>
 
 	<servlet-mapping>
 		<servlet-name>main</servlet-name>
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
+	
+	<servlet-mapping>
+        <servlet-name>main</servlet-name>
+        <url-pattern>/scalaskel/change/</url-pattern>
+    </servlet-mapping>
 </web-app>

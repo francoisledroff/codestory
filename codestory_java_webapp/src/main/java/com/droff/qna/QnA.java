@@ -1,4 +1,4 @@
-package com.droff;
+package com.droff.qna;
 
 public class QnA
 {

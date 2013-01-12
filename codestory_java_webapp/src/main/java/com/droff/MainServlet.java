@@ -1,10 +1,7 @@
 package com.droff;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
-import java.util.Arrays;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -14,14 +11,31 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.io.IOUtils;
 
+import com.droff.qna.QnAService;
+import com.droff.scalaskel.ChangeService;
+
 public class MainServlet extends HttpServlet
 {
     private static final long serialVersionUID = -4144852010453136192L;
 
+    private static final String SCALASKEL_CHANGE = "/scalaskel/change/";
+
+    private ChangeService changeService = new ChangeService();
+    private QnAService qnaService = new QnAService();
+
     public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
     {
         PrintWriter out = res.getWriter();
-        if (null != req.getParameter("q"))
+        String path = req.getPathInfo(); // jetty case for integration test
+        if (path == null) path = req.getServletPath(); // tomcat on cloudbees infra and local test.
+        
+        if (path.startsWith(SCALASKEL_CHANGE))
+        {
+            int total = Integer.parseInt(path.substring(SCALASKEL_CHANGE.length()));
+            out.print(GsonUtil.toJson(changeService.makeChange(total), false));
+        }
+        
+        else if (null != req.getParameter("q"))
         {
             out.print(lookupTheAnswer(req.getParameter("q").toString()));
         }
@@ -32,18 +46,12 @@ public class MainServlet extends HttpServlet
     {
         try
         {
-            InputStream stream = getClass().getClassLoader().getResourceAsStream("simpleQNAs.json");
-            List<QnA> simpleQnAs = Arrays.asList(GsonUtil.fromJson(IOUtils.toString(stream), QnA[].class));
-            int indexOftheAnswer = simpleQnAs.indexOf(new QnA(question));
-            if (indexOftheAnswer >= 0)
-            {
-                return simpleQnAs.get(indexOftheAnswer).getAnswer();
-            }
-            else
+            String answer = qnaService.answer(question);
+            if (answer.equals(QnAService.UNKNWON))
             {
                 getServletContext().log("GET q=" + question);
-                return "I took a note of this, please get back to me later";
             }
+            return answer;
         }
         catch (IOException e)
         {
