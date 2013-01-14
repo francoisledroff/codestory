@@ -17,7 +17,7 @@ public class EquationSolver
 
     static final Character OPENING_PARANTHESIS = '(';
     static final Character CLOSING_PARANTHESIS = ')';
-    static final Character PLUS = ' ';
+    static final Character PLUS = '+';
     static final Character MINUS = '-';
     static final Character DIVIDE = '/';
     static final Character TIMES = '*';
