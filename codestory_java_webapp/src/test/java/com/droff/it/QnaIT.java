@@ -25,7 +25,7 @@ public class QnaIT extends TestCase
         testSimpleAnswerFromSimpleGetQuestion("Es tu pret a recevoir une enonce au format markdown par http post(OUI/NON)", "OUI");   
         testSimpleAnswerFromSimpleGetQuestion("Est ce que tu reponds toujours oui(OUI/NON)", "NON");   
         testSimpleAnswerFromSimpleGetQuestion("As tu bien recu le premier enonce(OUI/NON)", "OUI");   
-        //testSimpleAnswerFromSimpleGetQuestion("1 1", "2.0");
+        //testSimpleAnswerFromSimpleGetQuestion("1 1", "2");
         //testSimpleAnswerFromSimpleGetQuestion("(1+2)/2", "1.5");
     }
    

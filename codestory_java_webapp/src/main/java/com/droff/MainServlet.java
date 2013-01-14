@@ -52,7 +52,11 @@ public class MainServlet extends HttpServlet
             {
                 try
                 {
-                    answer = EquationSolver.evaluate(question.replace(' ', '+').replace(',','+')).toString().replace('.',',');
+                    Double result = EquationSolver.evaluate(question.replace(' ', '+').replace(',','.'));
+                    if (result.doubleValue() - result.intValue()==0)
+                        answer = (""+result.intValue());
+                    else
+                        answer = (""+result.doubleValue()).replace('.',',');                     
                     // is it a french bot ?
                     getServletContext().log("resolved equation: " + question + " found "+answer);
                 }
