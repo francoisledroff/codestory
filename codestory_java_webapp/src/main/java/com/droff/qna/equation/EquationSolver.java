@@ -1,5 +1,7 @@
 package com.droff.qna.equation;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -33,16 +35,16 @@ public class EquationSolver
         OPERATORS_PRECEDENCES = Collections.unmodifiableMap(operators_precendences);
     }
 
-    private static Double computeOperation(char operator, Double operand1, Double operand2)
+    private static BigDecimal computeOperation(char operator, BigDecimal operand1, BigDecimal operand2)
     {
         if (operator == PLUS)
-            return operand1 + operand2;
+            return operand1.add(operand2);
         if (operator == MINUS)
-            return operand1 - operand2;
+            return operand1.min(operand2);
         if (operator == DIVIDE)
-            return operand1 / operand2;
+            return operand1.divide(operand2);
         if (operator == TIMES)
-            return operand1 * operand2;
+            return operand1.multiply(operand2);
         throw new RuntimeException("Invalid operator " + operator);
     }
 
@@ -74,17 +76,27 @@ public class EquationSolver
         return tokens;
     }
 
-    public static Double evaluate(String equation)
+    public static String evaluateAndFormat(String urlFormatedEquation)
+    {
+        String equation = urlFormatedEquation.replace(' ', '+').replace(',','.');
+        BigDecimal result =  evaluate(equation);        
+        DecimalFormat df = new DecimalFormat("0.########"); // removing trailing zeros
+        String formatted = df.format(result.stripTrailingZeros()).replace('.',',');   // is it a french bot ?   
+        return formatted;   
+    }
+    
+    
+    static BigDecimal evaluate(String equation)
     {
         Stack<Character> operatorsStack = new Stack<Character>();
-        Stack<Double> valuesStack = new Stack<Double>();
+        Stack<BigDecimal> valuesStack = new Stack<BigDecimal>();
         Iterator<String> tokensIterator = getTokens(equation).iterator();
         while (tokensIterator.hasNext())
         {
             String token = tokensIterator.next();            
             if (token.length()!=1 || !OPERATORS_PRECEDENCES.containsKey(token.charAt(0)))
             {
-                valuesStack.push(Double.parseDouble(token)); // the token is a value
+                valuesStack.push(BigDecimal.valueOf(Double.parseDouble(token))); // the token is a value
                 continue;
             }
             else
@@ -107,8 +119,8 @@ public class EquationSolver
                     }
                     else if (valuesStack.size() > 1)
                     {
-                        Double val2 = valuesStack.pop();
-                        Double val1 = valuesStack.pop();
+                        BigDecimal val2 = valuesStack.pop();
+                        BigDecimal val1 = valuesStack.pop();
                         valuesStack.push(computeOperation(operator, val1, val2));
                     }
                 }
@@ -117,11 +129,11 @@ public class EquationSolver
         while (!operatorsStack.isEmpty())
         {
             Character operator = operatorsStack.pop();
-            Double val2 = valuesStack.pop();
-            Double val1 = valuesStack.pop();
+            BigDecimal val2 = valuesStack.pop();
+            BigDecimal val1 = valuesStack.pop();
             valuesStack.push(computeOperation(operator, val1, val2));
         }
-        Double value = valuesStack.pop();
+        BigDecimal value = valuesStack.pop();
         assert valuesStack.isEmpty();
         assert operatorsStack.isEmpty();
         return value;        
