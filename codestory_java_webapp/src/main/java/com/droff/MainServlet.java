@@ -52,7 +52,7 @@ public class MainServlet extends HttpServlet
             {
                 try
                 {
-                    answer = ""  + EquationSolver.evaluateEquation(question);
+                    answer = ""  + EquationSolver.evaluate(question);
                     getServletContext().log("resolved equation: " + question + " found "+answer);
                 }
                 catch (Exception e)
