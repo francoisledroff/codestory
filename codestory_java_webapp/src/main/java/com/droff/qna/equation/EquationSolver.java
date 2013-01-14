@@ -33,7 +33,7 @@ public class EquationSolver
         OPERATORS_PRECEDENCES = Collections.unmodifiableMap(operators_precendences);
     }
 
-    private static Integer computeOperation(char operator, Integer operand1, Integer operand2)
+    private static Double computeOperation(char operator, Double operand1, Double operand2)
     {
         if (operator == PLUS)
             return operand1 + operand2;
@@ -74,17 +74,17 @@ public class EquationSolver
         return tokens;
     }
 
-    public static Integer evaluate(String equation)
+    public static Double evaluate(String equation)
     {
         Stack<Character> operatorsStack = new Stack<Character>();
-        Stack<Integer> valuesStack = new Stack<Integer>();
+        Stack<Double> valuesStack = new Stack<Double>();
         Iterator<String> tokensIterator = getTokens(equation).iterator();
         while (tokensIterator.hasNext())
         {
             String token = tokensIterator.next();            
             if (token.length()!=1 || !OPERATORS_PRECEDENCES.containsKey(token.charAt(0)))
             {
-                valuesStack.push(Integer.parseInt(token)); // the token is a value
+                valuesStack.push(Double.parseDouble(token)); // the token is a value
                 continue;
             }
             else
@@ -107,8 +107,8 @@ public class EquationSolver
                     }
                     else if (valuesStack.size() > 1)
                     {
-                        Integer val2 = valuesStack.pop();
-                        Integer val1 = valuesStack.pop();
+                        Double val2 = valuesStack.pop();
+                        Double val1 = valuesStack.pop();
                         valuesStack.push(computeOperation(operator, val1, val2));
                     }
                 }
@@ -117,11 +117,11 @@ public class EquationSolver
         while (!operatorsStack.isEmpty())
         {
             Character operator = operatorsStack.pop();
-            Integer val2 = valuesStack.pop();
-            Integer val1 = valuesStack.pop();
+            Double val2 = valuesStack.pop();
+            Double val1 = valuesStack.pop();
             valuesStack.push(computeOperation(operator, val1, val2));
         }
-        Integer value = valuesStack.pop();
+        Double value = valuesStack.pop();
         assert valuesStack.isEmpty();
         assert operatorsStack.isEmpty();
         return value;        
