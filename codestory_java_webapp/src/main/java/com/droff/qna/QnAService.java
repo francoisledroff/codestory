@@ -24,4 +24,9 @@ public class QnAService
             else
                 return UNKNWON; 
     }
+    
+    public String tryCalculus(String question)
+    {
+        return null;
+    }
 }

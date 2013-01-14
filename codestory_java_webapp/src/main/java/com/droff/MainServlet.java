@@ -12,6 +12,7 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.io.IOUtils;
 
 import com.droff.qna.QnAService;
+import com.droff.qna.equation.EquationSolver;
 import com.droff.scalaskel.ChangeService;
 
 public class MainServlet extends HttpServlet
@@ -49,9 +50,18 @@ public class MainServlet extends HttpServlet
             String answer = qnaService.answer(question);
             if (answer.equals(QnAService.UNKNWON))
             {
-                getServletContext().log("GET q=" + question);
+                try
+                {
+                    answer = ""  + EquationSolver.evaluateEquation(question);
+                    getServletContext().log("resolved equation: " + question + " found "+answer);
+                }
+                catch (Exception e)
+                {
+                    getServletContext().log("GET q=" + question);
+                }                
             }
             return answer;
+            
         }
         catch (IOException e)
         {
