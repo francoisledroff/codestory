@@ -28,6 +28,7 @@ public class QnaIT extends TestCase
         testSimpleAnswerFromSimpleGetQuestion("1+1", "2");
         testSimpleAnswerFromSimpleGetQuestion("(1+2)/2", "1,5");
         testSimpleAnswerFromSimpleGetQuestion("As tu passe une bonne nuit malgre les bugs de l etape precedente(PAS_TOP/BOF/QUELS_BUGS)", "PAS_TOP");
+        testSimpleAnswerFromSimpleGetQuestion("As tu bien recu le second enonce(OUI/NON)", "OUI");   
     }
    
     private void testSimpleAnswerFromSimpleGetQuestion(String question, String expectedAnswer) throws HttpException, IOException
