@@ -80,7 +80,7 @@ public class EquationSolver
     {
         String equation = urlFormatedEquation.replace(' ', '+').replace(',','.');
         BigDecimal result =  evaluate(equation);        
-        DecimalFormat df = new DecimalFormat("0.########"); // removing trailing zeros
+        DecimalFormat df = new DecimalFormat("0.################################################################################################################"); // removing trailing zeros
         String formatted = df.format(result.stripTrailingZeros()).replace('.',',');   // is it a french bot ?   
         return formatted;   
     }
@@ -96,7 +96,7 @@ public class EquationSolver
             String token = tokensIterator.next();            
             if (token.length()!=1 || !OPERATORS_PRECEDENCES.containsKey(token.charAt(0)))
             {
-                valuesStack.push(BigDecimal.valueOf(Double.parseDouble(token))); // the token is a value
+                valuesStack.push(new BigDecimal(token)); // the token is a value
                 continue;
             }
             else
