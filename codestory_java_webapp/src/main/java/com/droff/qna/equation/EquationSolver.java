@@ -11,8 +11,7 @@ import java.util.Stack;
 import java.util.TreeMap;
 
 /**
- * Dijkstra's two-stack algorithm implementation
- * doing Equation just like my HP: using "Reverse Polish" alike values and operators stacks  
+ * Dijkstra's two-stack algorithm implementation doing Equation just like my HP: using "Reverse Polish" alike values and operators stacks
  */
 public class EquationSolver
 {
@@ -24,7 +23,8 @@ public class EquationSolver
     static final Character DIVIDE = '/';
     static final Character TIMES = '*';
     static Map<Character, Integer> OPERATORS_PRECEDENCES;
-    static {
+    static
+    {
         Map<Character, Integer> operators_precendences = new TreeMap<Character, Integer>();
         operators_precendences.put(OPENING_PARANTHESIS, 0);
         operators_precendences.put(CLOSING_PARANTHESIS, 0);
@@ -33,6 +33,13 @@ public class EquationSolver
         operators_precendences.put(TIMES, 2);
         operators_precendences.put(DIVIDE, 2);
         OPERATORS_PRECEDENCES = Collections.unmodifiableMap(operators_precendences);
+    }
+
+    private static void computeOperation(Stack<BigDecimal> valuesStack, char operator)
+    {
+        BigDecimal val2 = valuesStack.pop();
+        BigDecimal val1 = valuesStack.pop();
+        valuesStack.push(computeOperation(operator, val1, val2));
     }
 
     private static BigDecimal computeOperation(char operator, BigDecimal operand1, BigDecimal operand2)
@@ -45,47 +52,61 @@ public class EquationSolver
             return operand1.divide(operand2);
         if (operator == TIMES)
             return operand1.multiply(operand2);
-        throw new RuntimeException("Invalid operator " + operator);
+        else
+            throw new RuntimeException("Invalid operator " + operator);
     }
 
     private static List<String> getTokens(String equation)
     {
         List<String> tokens = new ArrayList<String>();
-        String currentToken = "";
+        String currentTokenReader = "";
         for (int i = 0; i < equation.length(); i++)
         {
             char currentChar = equation.charAt(i);
             if (OPERATORS_PRECEDENCES.containsKey(currentChar))
             {
-                if (currentToken.length() > 0)
+                if (currentTokenReader.length() > 0)
                 {
-                    tokens.add(currentToken); // last token was a value
-                    currentToken = "";
+                    addANumber(tokens, currentTokenReader);
+                    currentTokenReader = ""; // reset the reader
                 }
                 tokens.add("" + currentChar); // this char is an operator
             }
             else
             {
-                currentToken += currentChar;
+                currentTokenReader += currentChar;
             }
         }
-        if (currentToken.length() > 0)
+        if (currentTokenReader.length() > 0)
         {
-            tokens.add(currentToken); // last token was a value
+            addANumber(tokens, currentTokenReader); // last token was hopefully a value
         }
         return tokens;
     }
 
-    public static String evaluateAndFormat(String urlFormatedEquation)
+    private static void addANumber(List<String> tokens, String number)
     {
-        String equation = urlFormatedEquation.replace(' ', '+').replace(',','.');
-        BigDecimal result =  evaluate(equation);        
-        DecimalFormat df = new DecimalFormat("0.################################################################################################################"); // removing trailing zeros
-        String formatted = df.format(result.stripTrailingZeros()).replace('.',',');   // is it a french bot ?   
-        return formatted;   
+        if (tokens.size() >= 1
+                && tokens.get(tokens.size() - 1).charAt(0)==MINUS.charValue()
+                && (tokens.size() == 1 || (tokens.get(tokens.size() - 2).length() == 1 && OPERATORS_PRECEDENCES
+                        .containsKey(tokens.get(tokens.size() - 2).charAt(0)))))
+            tokens.set(tokens.size() - 1, "-" + number); // last token was a negative value
+        else                        
+            tokens.add(number); // last token was a positive value
     }
     
-    
+    public static String evaluateAndFormat(String urlFormatedEquation)
+    {
+        String equation = urlFormatedEquation.replace(' ', '+').replace(',', '.');
+        BigDecimal result = evaluate(equation);
+        DecimalFormat df = new DecimalFormat(
+                "0.################################################################################################################"); // removing
+                                                                                                                                       // trailing
+                                                                                                                                       // zeros
+        String formatted = df.format(result.stripTrailingZeros()).replace('.', ','); // is it a french bot ?
+        return formatted;
+    }
+
     static BigDecimal evaluate(String equation)
     {
         Stack<Character> operatorsStack = new Stack<Character>();
@@ -93,8 +114,8 @@ public class EquationSolver
         Iterator<String> tokensIterator = getTokens(equation).iterator();
         while (tokensIterator.hasNext())
         {
-            String token = tokensIterator.next();            
-            if (token.length()!=1 || !OPERATORS_PRECEDENCES.containsKey(token.charAt(0)))
+            String token = tokensIterator.next();
+            if (token.length() != 1 || !OPERATORS_PRECEDENCES.containsKey(token.charAt(0)))
             {
                 valuesStack.push(new BigDecimal(token)); // the token is a value
                 continue;
@@ -117,25 +138,21 @@ public class EquationSolver
                         assert nextOperator == CLOSING_PARANTHESIS;
                         break; // closing paranthesis, ditching them
                     }
-                    else if (valuesStack.size() > 1)
+                    else if (valuesStack.size() >= 1)
                     {
-                        BigDecimal val2 = valuesStack.pop();
-                        BigDecimal val1 = valuesStack.pop();
-                        valuesStack.push(computeOperation(operator, val1, val2));
+                        computeOperation(valuesStack, operator);
                     }
                 }
             }
         }
         while (!operatorsStack.isEmpty())
         {
-            Character operator = operatorsStack.pop();
-            BigDecimal val2 = valuesStack.pop();
-            BigDecimal val1 = valuesStack.pop();
-            valuesStack.push(computeOperation(operator, val1, val2));
+            computeOperation(valuesStack, operatorsStack.pop());
         }
         BigDecimal value = valuesStack.pop();
         assert valuesStack.isEmpty();
         assert operatorsStack.isEmpty();
-        return value;        
+        return value;
     }
+
 }

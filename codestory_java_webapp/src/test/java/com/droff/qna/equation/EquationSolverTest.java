@@ -13,6 +13,9 @@ public class EquationSolverTest extends TestCase
         testEquation("(1+1)", new BigDecimal(2));
         testEquation("1+1+(1+2)*2", new BigDecimal(8));
         testEquation("(1+2)/2", new BigDecimal(1.5));
+        testEquation("(-1)+1", new BigDecimal(0));
+        testEquation("(-1)*(-1)", new BigDecimal(1));
+        testEquation("-1*-1", new BigDecimal(1));
     }
     
     public void testEquationAndFormat()
@@ -23,6 +26,7 @@ public class EquationSolverTest extends TestCase
         testEquationAndResultEncoding("(1 2)/2", "1,5");
         testEquationAndResultEncoding("1,5*4", "6");
         testEquationAndResultEncoding("((1,1 2) 3,14 4 (5 6 7) (8 9 10)*4267387833344334647677634)/2*553344300034334349999000","31878018903828899277492024491376690701584023926880");
+        //(-1) (1) found 2
     }
     
     private void testEquationAndResultEncoding(String equation, String result)
